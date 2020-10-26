@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 public class PlayerController : MonoBehaviour
 {
     public Animator animator;
@@ -12,11 +14,21 @@ public class PlayerController : MonoBehaviour
     private bool attacking;
     private bool dontAttack;
     private bool weapon = false;
+    public int maxHealth = 10;
+    public int currentHealth;
+    public HealthBar healthBar;
+    public bool attack;
+    public int birdHealth;
+    public int dragonHealth;
+    public int mouseHealth;
+    public int shovelHealth;
 
     // Start is called before the first frame update
     void Start()
     {
         dontMove = true;
+        currentHealth = maxHealth;
+        healthBar.SetMaxHealth(maxHealth);
     }
 
     // Update is called once per frame
@@ -100,10 +112,12 @@ public class PlayerController : MonoBehaviour
     }
     public void Attack()
     {
+        attack = true;
         animator.SetBool("attack", true);
     }
     public void StopAttacking()
     {
+        attack = false;
         animator.SetBool("attack", false);
     }
     void DirectInput()
@@ -129,6 +143,96 @@ public class PlayerController : MonoBehaviour
         {
             weapon = true;
             animator.SetBool("weapon", true);
+        }
+        
+        if (collision.gameObject.name == "Dragon")
+        {
+            if (attack == false)
+            {
+                TakeDamage(2);
+            }
+            if (attack == true)
+            {
+                dragonHealth -= 1;
+            }
+            if (attack == true && weapon == true)
+            {
+                dragonHealth -= 2;
+            }
+            if (dragonHealth <= 0)
+            {
+                Destroy(GameObject.Find("Dragon"));
+            }
+        }
+
+        if (collision.gameObject.name == "Shovel Enemy")
+        {
+            if (attack == false)
+            {
+                TakeDamage(2);
+            }
+            if (attack == true)
+            {
+                shovelHealth -= 1;
+            }
+            if (attack == true && weapon == true)
+            {
+                shovelHealth -= 2;
+            }
+            if (shovelHealth <= 0)
+            {
+                Destroy(GameObject.Find("Shovel Enemy"));
+            }
+        }
+
+        if (collision.gameObject.name == "bird")
+        {
+            if (attack == false)
+            {
+                TakeDamage(1);
+            }
+            if(attack == true)
+            {
+                birdHealth -= 1;
+            }
+            if(attack == true && weapon == true)
+            {
+                birdHealth -= 2;
+            }
+            if(birdHealth <= 0)
+            {
+                Destroy(GameObject.Find("bird"));
+            }
+        }
+
+        if (collision.gameObject.name == "mouse")
+        {
+            if (attack == false)
+            {
+                TakeDamage(1);
+            }
+            if (attack == true)
+            {
+                mouseHealth -= 1;
+            }
+            if (attack == true && weapon == true)
+            {
+                mouseHealth -= 2;
+            }
+            if (mouseHealth <= 0)
+            {
+                Destroy(GameObject.Find("mouse"));
+            }
+        }
+    }
+
+    void TakeDamage(int damage)
+    {
+        currentHealth -= damage;
+        healthBar.SetHealth(currentHealth);
+        if(currentHealth == 0)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 2);
         }
     }
 }
