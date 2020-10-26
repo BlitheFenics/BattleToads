@@ -5,6 +5,13 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/* Source File Name: PlayerController
+ * Author's Name: Phoenix Makins
+ * Student Number: 101193192
+ * Date Last Modified: 2020-10-25
+ * Program Description: Takes player input, plays sound effects for the player, plays player animations, manages incoming and outgoing damage for the player, applies score values for the player, allows player to enter portal
+ * Revision History: created it, Added movement, added animations, added pickups, addedd health, added sound effects, added win/lose conditions, Added Internal documentation
+ */
 public class PlayerController : MonoBehaviour
 {
     public Animator animator;
@@ -72,6 +79,7 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+    // Checks to see if the player is or isnt moving
     public void AllowMovement(bool movement)
     {
         dontMove = false;
@@ -81,6 +89,7 @@ public class PlayerController : MonoBehaviour
     {
         dontMove = true;
     }
+    // Checks to see if the player is or isnt attacking
     public void Attacking(bool attack)
     {
         dontAttack = false;
@@ -90,6 +99,7 @@ public class PlayerController : MonoBehaviour
     {
         dontAttack= true;
     }
+    // Moves the player left when they touch the left arrow button, flips their sprite left and plays the walk animation
     public void MoveLeft()
     {
         Vector3 characterScale = player.localScale;
@@ -101,6 +111,7 @@ public class PlayerController : MonoBehaviour
         player.Translate(new Vector2(-speed, 0) * Time.deltaTime);
         animator.SetFloat("speed", Mathf.Abs(speed));
     }
+    // Moves the player right when they touch the right arrow button, flips their sprite right and plays the walk animation
     public void MoveRight()
     {
         Vector3 characterScale = player.localScale;
@@ -112,21 +123,25 @@ public class PlayerController : MonoBehaviour
         player.Translate(new Vector2(speed, 0) * Time.deltaTime);
         animator.SetFloat("speed", Mathf.Abs(speed));
     }
+    // Makes the player idle and plays the idle animation
     public void StopMoving()
     {
         player.Translate(new Vector2(0, 0) * Time.deltaTime);
         animator.SetFloat("speed", 0);
     }
+    // Plays the attack animation and sets an attacking bool to true
     public void Attack()
     {
         attack = true;
         animator.SetBool("attack", true);
     }
+    // Stops playing the attack animation and sets an attacking bool to false
     public void StopAttacking()
     {
         attack = false;
         animator.SetBool("attack", false);
     }
+    // Move the player Kinematically left or right
     void DirectInput()
     {
         float x = Input.GetAxisRaw("Horizontal");
@@ -144,8 +159,10 @@ public class PlayerController : MonoBehaviour
             StopMoving();
         }
     }
+    // Checks colliosions with the player
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        // Checks for collision with the staff plays a sound applies a score and switches all damage values and animations for the player to their weapon variant
         if (collision.gameObject.name == "staff")
         {
             weapon = true;
@@ -153,9 +170,10 @@ public class PlayerController : MonoBehaviour
             audioSource.PlayOneShot(pickUp);
             Score.scoreValue += 100;
         }
-        
+        // Checks for collision with the dragon
         if (collision.gameObject.name == "Dragon")
         {
+            // Applies damage to the player and plays a sound
             if (attack == false)
             {
                 TakeDamage(2);
@@ -163,17 +181,20 @@ public class PlayerController : MonoBehaviour
             }
             if (attack == true)
             {
+                // player attacks with fist and deals damage and plays a sound
                 if (weapon == false)
                 {
                     dragonHealth -= 1;
                     audioSource.PlayOneShot(punch);
                 }
+                // player attacks with weapon deals damage and plays a sound
                 if (weapon == true)
                 {
                     dragonHealth -= 2;
                     audioSource.PlayOneShot(swing);
                 }
             }
+            // Deletes the dragon when its health is 0 and applies a score
             if (dragonHealth <= 0)
             {
                 Destroy(GameObject.Find("Dragon"));
@@ -187,9 +208,10 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
-
+        // Checks for collision with the shovel enemy
         if (collision.gameObject.name == "Shovel Enemy")
         {
+            // Applies damage to the player and plays a sound
             if (attack == false)
             {
                 TakeDamage(2);
@@ -197,52 +219,59 @@ public class PlayerController : MonoBehaviour
             }
             if (attack == true)
             {
+                // player attacks with fist and deals damage and plays a sound
                 if (weapon == false)
                 {
                     shovelHealth -= 1;
                     audioSource.PlayOneShot(punch);
                 }
+                // player attacks with weapon deals damage and plays a sound
                 if (weapon == true)
                 {
                     shovelHealth -= 2;
                     audioSource.PlayOneShot(swing);
                 }
             }
+            // Deletes the shovel enemy when its health is 0 and applies a score
             if (shovelHealth <= 0)
             {
                 Destroy(GameObject.Find("Shovel Enemy"));
-                    if (weapon == false)
-                    {
-                        Score.scoreValue += 20;
-                    }
-                    if (weapon == true)
-                    {
-                        Score.scoreValue += 40;
-                    }
+                if (weapon == false)
+                {
+                    Score.scoreValue += 20;
+                }
+                if (weapon == true)
+                {
+                    Score.scoreValue += 40;
+                }
             }
         }
-
+        // Checks for collision with the bird
         if (collision.gameObject.name == "bird")
         {
+            // Applies damage to the player and plays a sound
             if (attack == false)
             {
                 TakeDamage(1);
                 audioSource.PlayOneShot(hurt);
             }
-            if(attack == true)
+            if (attack == true)
             {
+                // player attacks with fist and deals damage and plays a sound
                 if (weapon == false)
                 {
                     birdHealth -= 1;
                     audioSource.PlayOneShot(punch);
                 }
+                // player attacks with weapon deals damage and plays a sound
                 if (weapon == true)
                 {
                     birdHealth -= 2;
                     audioSource.PlayOneShot(swing);
                 }
             }
-            if(birdHealth <= 0)
+            // Deletes the bird when its health is 0 and applies a score
+            if (birdHealth <= 0)
             {
                 Destroy(GameObject.Find("bird"));
                 if (weapon == false)
@@ -255,9 +284,10 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
-
+        // Checks for collision with the mouse
         if (collision.gameObject.name == "mouse")
         {
+            // Applies damage to the player and plays a sound
             if (attack == false)
             {
                 TakeDamage(1);
@@ -265,17 +295,20 @@ public class PlayerController : MonoBehaviour
             }
             if (attack == true)
             {
-                if(weapon==false)
+                // player attacks with fist and deals damage and plays a sound
+                if (weapon == false)
                 {
                     mouseHealth -= 1;
                     audioSource.PlayOneShot(punch);
                 }
-                if(weapon==true)
+                // player attacks with weapon deals damage and plays a sound
+                if (weapon == true)
                 {
                     mouseHealth -= 2;
                     audioSource.PlayOneShot(swing);
                 }
             }
+            // Deletes the mouse when its health is 0 and applies a score
             if (mouseHealth <= 0)
             {
                 Destroy(GameObject.Find("mouse"));
@@ -289,7 +322,13 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+        // Checks for collision for the portal and switches the scene to then end game scene
+        if (collision.gameObject.name == "portal")
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 2);
+        }
     }
+    // If the players health gets to 0 it takes them to the endgame screen
     void TakeDamage(int damage)
     {
         currentHealth -= damage;

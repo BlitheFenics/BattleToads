@@ -2,6 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/* Source File Name: FlyingEnemy
+ * Author's Name: Phoenix Makins
+ * Student Number: 101193192
+ * Date Last Modified: 2020-10-25
+ * Program Description: Moves flying enemies
+ * Revision History: created it, Added Internal documentation
+ */
 public class FlyingEnemy : MonoBehaviour
 {
     public float speed;
@@ -14,6 +21,7 @@ public class FlyingEnemy : MonoBehaviour
         MoveDown();
         MoveUp();
     }
+    // Moves enemy left towards the player and flips their sprite so they face left
     public void MoveLeft()
     {
         var pos = GameObject.Find("player").transform.position;
@@ -29,6 +37,7 @@ public class FlyingEnemy : MonoBehaviour
             transform.Translate(new Vector2(-speed, 0) * Time.deltaTime);
         }
     }
+    // Moves enemy right towards the player and flips their sprite so they face right
     public void MoveRight()
     {
         var pos = GameObject.Find("player").transform.position;
@@ -44,6 +53,7 @@ public class FlyingEnemy : MonoBehaviour
             transform.Translate(new Vector2(speed, 0) * Time.deltaTime);
         }
     }
+    // Moves enemy down towards the player 
     public void MoveDown()
     {
         var pos = GameObject.Find("player").transform.position;
@@ -53,6 +63,7 @@ public class FlyingEnemy : MonoBehaviour
             transform.Translate(new Vector2(0, -speed) * Time.deltaTime);
         }
     }
+    // Moves enemy up towards the player
     public void MoveUp()
     {
         var pos = GameObject.Find("player").transform.position;

@@ -2,8 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
-
+/* Source File Name: GroundEnemy
+ * Author's Name: Phoenix Makins
+ * Student Number: 101193192
+ * Date Last Modified: 2020-10-25
+ * Program Description: Moves ground enemies
+ * Revision History: created it, Added Internal documentation
+ */
 public class GroundEnemy : MonoBehaviour
 {
     public float speed;
@@ -14,6 +19,8 @@ public class GroundEnemy : MonoBehaviour
         MoveLeft();
         MoveRight();
     }
+
+    // Moves enemy left towards the player and flips their sprite so they face left
     public void MoveLeft()
     {
         var pos = GameObject.Find("player").transform.position;
@@ -29,6 +36,7 @@ public class GroundEnemy : MonoBehaviour
             transform.Translate(new Vector2(-speed, 0) * Time.deltaTime);
         }
     }
+    // Moves enemy right towards the player and flips their sprite so they face right
     public void MoveRight()
     {
         var pos = GameObject.Find("player").transform.position;

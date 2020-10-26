@@ -412,7 +412,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 735.2437, y: 239.16953}
+  m_SizeDelta: {x: 1053.2874, y: 470.4738}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1066775714
 MonoBehaviour:
@@ -436,10 +436,10 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 24
+    m_FontSize: 40
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 2
+    m_MinSize: 0
     m_MaxSize: 40
     m_Alignment: 0
     m_AlignByGeometry: 0
@@ -447,24 +447,23 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'press ''A'' to go left
+  m_Text: 'Tap the left arrow to go left
 
-    Press ''D'' to go tight
+    tap the right arrow to go tight
 
-    Press ''Left
-    Click'' to attack
+    tap
+    the A button to attack
 
 
-    Walk over a staff to pickup the weapon.
+    Walk over a staff to pickup the weapon and get points.
 
-    Kill enimies
-    to increase your score.
+    Kill
+    enimies to increase your score.
 
-    The Faster you complete the level the higer your
-    bonus score will be.
+    Get to the exit at the right of the level
+    to complete the game.
 
-    Get to the exit at the right of the level to complete
-    the game.'
+    The higher your score the better.'
 --- !u!222 &1066775715
 CanvasRenderer:
   m_ObjectHideFlags: 0

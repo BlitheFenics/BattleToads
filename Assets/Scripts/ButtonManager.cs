@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-/* Source File Name: Button
+/* Source File Name: ButtonManager
  * Author's Name: Phoenix Makins
  * Student Number: 101193192
- * Date Last Modified: 2020-10-06
+ * Date Last Modified: 2020-10-25
  * Program Description: Buttons to switch scenes
- * Revision History: Added Internal documentation
+ * Revision History: Created it, Added Internal documentation, edited documentation
  */
 
+// Switches scenes using index values that each scene has pre applied
 public class ButtonManager : MonoBehaviour
 {
     public void playGame()
