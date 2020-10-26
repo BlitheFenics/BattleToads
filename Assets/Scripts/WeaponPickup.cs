@@ -13,12 +13,6 @@ public class WeaponPickup : MonoBehaviour
         transform.Translate(new Vector2(x, 0));
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.name == "player")

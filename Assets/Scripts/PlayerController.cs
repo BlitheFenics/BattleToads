@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Net.Sockets;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -22,6 +23,11 @@ public class PlayerController : MonoBehaviour
     public int dragonHealth;
     public int mouseHealth;
     public int shovelHealth;
+    public AudioSource audioSource;
+    public AudioClip punch;
+    public AudioClip pickUp;
+    public AudioClip swing;
+    public AudioClip hurt;
 
     // Start is called before the first frame update
     void Start()
@@ -29,6 +35,7 @@ public class PlayerController : MonoBehaviour
         dontMove = true;
         currentHealth = maxHealth;
         healthBar.SetMaxHealth(maxHealth);
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -143,6 +150,8 @@ public class PlayerController : MonoBehaviour
         {
             weapon = true;
             animator.SetBool("weapon", true);
+            audioSource.PlayOneShot(pickUp);
+            Score.scoreValue += 100;
         }
         
         if (collision.gameObject.name == "Dragon")
@@ -150,18 +159,32 @@ public class PlayerController : MonoBehaviour
             if (attack == false)
             {
                 TakeDamage(2);
+                audioSource.PlayOneShot(hurt);
             }
             if (attack == true)
             {
-                dragonHealth -= 1;
-            }
-            if (attack == true && weapon == true)
-            {
-                dragonHealth -= 2;
+                if (weapon == false)
+                {
+                    dragonHealth -= 1;
+                    audioSource.PlayOneShot(punch);
+                }
+                if (weapon == true)
+                {
+                    dragonHealth -= 2;
+                    audioSource.PlayOneShot(swing);
+                }
             }
             if (dragonHealth <= 0)
             {
                 Destroy(GameObject.Find("Dragon"));
+                if (weapon == false)
+                {
+                    Score.scoreValue += 20;
+                }
+                if (weapon == true)
+                {
+                    Score.scoreValue += 40;
+                }
             }
         }
 
@@ -170,18 +193,32 @@ public class PlayerController : MonoBehaviour
             if (attack == false)
             {
                 TakeDamage(2);
+                audioSource.PlayOneShot(hurt);
             }
             if (attack == true)
             {
-                shovelHealth -= 1;
-            }
-            if (attack == true && weapon == true)
-            {
-                shovelHealth -= 2;
+                if (weapon == false)
+                {
+                    shovelHealth -= 1;
+                    audioSource.PlayOneShot(punch);
+                }
+                if (weapon == true)
+                {
+                    shovelHealth -= 2;
+                    audioSource.PlayOneShot(swing);
+                }
             }
             if (shovelHealth <= 0)
             {
                 Destroy(GameObject.Find("Shovel Enemy"));
+                    if (weapon == false)
+                    {
+                        Score.scoreValue += 20;
+                    }
+                    if (weapon == true)
+                    {
+                        Score.scoreValue += 40;
+                    }
             }
         }
 
@@ -190,18 +227,32 @@ public class PlayerController : MonoBehaviour
             if (attack == false)
             {
                 TakeDamage(1);
+                audioSource.PlayOneShot(hurt);
             }
             if(attack == true)
             {
-                birdHealth -= 1;
-            }
-            if(attack == true && weapon == true)
-            {
-                birdHealth -= 2;
+                if (weapon == false)
+                {
+                    birdHealth -= 1;
+                    audioSource.PlayOneShot(punch);
+                }
+                if (weapon == true)
+                {
+                    birdHealth -= 2;
+                    audioSource.PlayOneShot(swing);
+                }
             }
             if(birdHealth <= 0)
             {
                 Destroy(GameObject.Find("bird"));
+                if (weapon == false)
+                {
+                    Score.scoreValue += 10;
+                }
+                if (weapon == true)
+                {
+                    Score.scoreValue += 20;
+                }
             }
         }
 
@@ -210,27 +261,40 @@ public class PlayerController : MonoBehaviour
             if (attack == false)
             {
                 TakeDamage(1);
+                audioSource.PlayOneShot(hurt);
             }
             if (attack == true)
             {
-                mouseHealth -= 1;
-            }
-            if (attack == true && weapon == true)
-            {
-                mouseHealth -= 2;
+                if(weapon==false)
+                {
+                    mouseHealth -= 1;
+                    audioSource.PlayOneShot(punch);
+                }
+                if(weapon==true)
+                {
+                    mouseHealth -= 2;
+                    audioSource.PlayOneShot(swing);
+                }
             }
             if (mouseHealth <= 0)
             {
                 Destroy(GameObject.Find("mouse"));
+                if (weapon == false)
+                {
+                    Score.scoreValue += 10;
+                }
+                if (weapon == true)
+                {
+                    Score.scoreValue += 20;
+                }
             }
         }
     }
-
     void TakeDamage(int damage)
     {
         currentHealth -= damage;
         healthBar.SetHealth(currentHealth);
-        if(currentHealth == 0)
+        if(currentHealth <= 0)
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 2);
         }
