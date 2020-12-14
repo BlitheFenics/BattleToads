@@ -8,9 +8,9 @@ using UnityEngine.SceneManagement;
 /* Source File Name: PlayerController
  * Author's Name: Phoenix Makins
  * Student Number: 101193192
- * Date Last Modified: 2020-10-25
- * Program Description: Takes player input, plays sound effects for the player, plays player animations, manages incoming and outgoing damage for the player, applies score values for the player, allows player to enter portal
- * Revision History: created it, Added movement, added animations, added pickups, addedd health, added sound effects, added win/lose conditions, Added Internal documentation
+ * Date Last Modified: 2020-12-13
+ * Program Description: Takes player input, plays sound effects for the player, plays player animations, manages incoming and outgoing damage for the player, applies score values for the player, allows player to enter portal, allows player to jump
+ * Revision History: created it, Added movement, added animations, added pickups, addedd health, added sound effects, added win/lose conditions, Added Internal documentation, added ability to jump
  */
 public class PlayerController : MonoBehaviour
 {
@@ -35,6 +35,9 @@ public class PlayerController : MonoBehaviour
     public AudioClip pickUp;
     public AudioClip swing;
     public AudioClip hurt;
+    public bool jumpUp;
+    public bool dontJump;
+    public bool isGrounded = false;
 
     // Start is called before the first frame update
     void Start()
@@ -49,6 +52,16 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         HandleMoving();
+
+        // Checks to see if the player is touching the ground. If they are switch to jump animation, if they aren't switch to idle animation
+        if(isGrounded)
+        {
+            animator.SetBool("jump", false);
+        }
+        else
+        {
+            animator.SetBool("jump", true);
+        }
     }
     void HandleMoving()
     {
@@ -78,7 +91,43 @@ public class PlayerController : MonoBehaviour
                 Attack();
             }
         }
+        if(dontJump)
+        {
+            StopJumping();
+        }
+        else
+        {
+            if(jumpUp)
+            {
+                Jump();
+            }
+        }
     }
+
+    // Checks to see if the player can jump and allows them to if they can, doesn;t allow them if they can't
+    public void AllowJump(bool jump)
+    {
+        dontJump = false;
+        jumpUp = jump;
+    }
+    public void DontAllowJump()
+    {
+        dontJump = true;
+    }
+
+    // If the player hits the 'B' button it applies a force to the player, removes the force otherwise
+    public void Jump()
+    {
+        if (isGrounded == true)
+        {
+            gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(0f, 10f), ForceMode2D.Impulse);
+        }
+    }
+    public void StopJumping()
+    {
+        gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(0f, 0f), ForceMode2D.Impulse);
+    }
+
     // Checks to see if the player is or isnt moving
     public void AllowMovement(bool movement)
     {
@@ -108,8 +157,11 @@ public class PlayerController : MonoBehaviour
             characterScale.x = -4;
         }
         player.localScale = characterScale;
-        player.Translate(new Vector2(-speed, 0) * Time.deltaTime);
+        Vector3 movement = new Vector3(-speed, 0f, 0f);
+        transform.position += movement * Time.deltaTime * speed;
         animator.SetFloat("speed", Mathf.Abs(speed));
+
+        
     }
     // Moves the player right when they touch the right arrow button, flips their sprite right and plays the walk animation
     public void MoveRight()
@@ -120,7 +172,8 @@ public class PlayerController : MonoBehaviour
             characterScale.x = 4;
         }
         player.localScale = characterScale;
-        player.Translate(new Vector2(speed, 0) * Time.deltaTime);
+        Vector3 movement = new Vector3(speed, 0f, 0f);
+        transform.position += movement * Time.deltaTime * speed;
         animator.SetFloat("speed", Mathf.Abs(speed));
     }
     // Makes the player idle and plays the idle animation
@@ -322,12 +375,30 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        // If the player collides with the platform this adds it's movement to their own
+        if (collision.gameObject.name == "platform")
+        {
+            this.transform.parent = collision.transform;
+        }
+
         // Checks for collision for the portal and switches the scene to then end game scene
         if (collision.gameObject.name == "portal")
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 2);
         }
     }
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        // If the player stops colliding with the platform this stops them from adding it's movement to their own
+        if (collision.gameObject.name == "platform")
+        {
+            this.transform.parent = null;
+        }
+    }
+
     // If the players health gets to 0 it takes them to the endgame screen
     void TakeDamage(int damage)
     {

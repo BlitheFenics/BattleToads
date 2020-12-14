@@ -454,16 +454,19 @@ MonoBehaviour:
     tap
     the A button to attack
 
+    tap the B button to jump
 
-    Walk over a staff to pickup the weapon and get points.
 
-    Kill
-    enimies to increase your score.
+    Walk over a staff
+    to pickup the weapon and get points.
 
-    Get to the exit at the right of the level
-    to complete the game.
+    Kill enimies to increase your score.
 
-    The higher your score the better.'
+    Get
+    to the exit at the right of the level to complete the game.
+
+    The higher your
+    score the better.'
 --- !u!222 &1066775715
 CanvasRenderer:
   m_ObjectHideFlags: 0
