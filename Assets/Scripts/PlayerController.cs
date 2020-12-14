@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 /* Source File Name: PlayerController
  * Author's Name: Phoenix Makins
  * Student Number: 101193192
- * Date Last Modified: 2020-12-13
+ * Date Last Modified: 2020-12-14
  * Program Description: Takes player input, plays sound effects for the player, plays player animations, manages incoming and outgoing damage for the player, applies score values for the player, allows player to enter portal, allows player to jump
  * Revision History: created it, Added movement, added animations, added pickups, addedd health, added sound effects, added win/lose conditions, Added Internal documentation, added ability to jump
  */
@@ -378,16 +378,15 @@ public class PlayerController : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // If the player collides with the platform this adds it's movement to their own
-        if (collision.gameObject.name == "platform")
-        {
-            this.transform.parent = collision.transform;
-        }
-
         // Checks for collision for the portal and switches the scene to then end game scene
         if (collision.gameObject.name == "portal")
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 2);
+        }
+        // If the player collides with the platform this adds it's movement to their own
+        if (collision.gameObject.name == "platform")
+        {
+            this.transform.parent = collision.transform;
         }
     }
     private void OnCollisionExit2D(Collision2D collision)
